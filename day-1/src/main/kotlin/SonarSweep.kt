@@ -5,6 +5,13 @@ fun main() {
     partTwo().apply {
         println("Part Two Solution: $this")
     }
+
+    partOneFunctional().apply {
+        println("Part One Functional Solution: $this")
+    }
+    partTwoWindowed().apply {
+        println("Part Two Windowed Solution: $this")
+    }
 }
 
 fun partOne(): Int {
@@ -48,6 +55,30 @@ data class ThreeMeasureSlide(
     val third: Int,
 ) {
     fun sum() = first.plus(second).plus(third)
+}
+
+fun partOneFunctional(): Int {
+
+    val lines = readInput()
+    return lines.drop(1)
+        .filterIndexed { index, element ->
+            element > lines[index]
+        }
+        .count()
+}
+
+fun partTwoWindowed(): Int {
+
+    val lines = readInput()
+    val slides = lines.windowed(3, 1, false) {
+        it[0] + it[1] + it[2]
+    }
+
+    return slides.drop(1)
+        .filterIndexed { index, element ->
+            element > slides[index]
+        }
+        .count()
 }
 
 private fun readInput(): List<Int> {
