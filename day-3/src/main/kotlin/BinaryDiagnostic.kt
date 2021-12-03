@@ -1,12 +1,6 @@
 fun main() {
-
-    partOne().apply {
-        println("Part One Solution: $this")
-    }
-
-    partTwo().apply {
-        println("Part Two Solution: $this")
-    }
+    println("Part One Solution: ${partOne()}")
+    println("Part Two Solution: ${partTwo()}")
 }
 
 private fun partOne(): Int {
