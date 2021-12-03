@@ -11,8 +11,8 @@ private fun partOne(): Int {
         findMostCommonBit(it)
     }.toCharArray().concatToString()
 
-    val gammaRate = Int.fromBinaryString(mostCommonBits)
-    val epsilonRate = Int.fromBinaryString(invertBits(mostCommonBits))
+    val gammaRate = mostCommonBits.toInt(2)
+    val epsilonRate = invertBits(mostCommonBits).toInt(2)
 
     return gammaRate * epsilonRate
 }
@@ -50,10 +50,8 @@ private fun findRating(
         }
         index++
     }
-    return Int.fromBinaryString(lines[0])
+    return lines[0].toInt(2)
 }
-
-private fun Int.Companion.fromBinaryString(s: String) = Integer.parseUnsignedInt(s, 2)
 
 private fun readColumns(lines: List<String>): List<MutableList<Char>> {
     val columns = List(lines[0].length) {
