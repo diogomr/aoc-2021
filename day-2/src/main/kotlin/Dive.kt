@@ -1,12 +1,7 @@
 fun main() {
 
-    partOne().apply {
-        println("Part One Solution: $this")
-    }
-
-    partTwo().apply {
-        println("Part Two Solution: $this")
-    }
+    println("Part One Solution: ${partOne()}")
+    println("Part Two Solution: ${partTwo()}")
 }
 
 private fun partOne(): Int {
@@ -14,7 +9,7 @@ private fun partOne(): Int {
     var depth = 0
 
     readInput()
-        .map {
+        .forEach {
             when (it.first) {
                 Command.FORWARD -> horizontal += it.second
                 Command.DOWN -> depth += it.second
@@ -31,7 +26,7 @@ private fun partTwo(): Int {
     var depth = 0
 
     readInput()
-        .map {
+        .forEach {
             when (it.first) {
                 Command.FORWARD -> {
                     horizontal += it.second
