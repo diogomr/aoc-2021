@@ -10,10 +10,9 @@ private fun partOne(): Int {
     val mostCommonBits = columns.map {
         findMostCommonBit(it)
     }.toCharArray().concatToString()
-    val leastCommonBits = invertBits(mostCommonBits)
 
-    val gammaRate = readBinaryNumber(mostCommonBits)
-    val epsilonRate = readBinaryNumber(leastCommonBits)
+    val gammaRate = Int.fromBinaryString(mostCommonBits)
+    val epsilonRate = Int.fromBinaryString(invertBits(mostCommonBits))
 
     return gammaRate * epsilonRate
 }
@@ -51,10 +50,10 @@ private fun findRating(
         }
         index++
     }
-    return readBinaryNumber(lines[0])
+    return Int.fromBinaryString(lines[0])
 }
 
-private fun readBinaryNumber(mostCommonBitsString: String) = Integer.parseUnsignedInt(mostCommonBitsString, 2)
+private fun Int.Companion.fromBinaryString(s: String) = Integer.parseUnsignedInt(s, 2)
 
 private fun readColumns(lines: List<String>): List<MutableList<Char>> {
     val columns = List(lines[0].length) {
@@ -69,10 +68,12 @@ private fun readColumns(lines: List<String>): List<MutableList<Char>> {
     return columns
 }
 
-private fun findMostCommonBit(column: Collection<Char>) =
-    if (column.count { it == '1' } >= column.count { it == '0' }) '1' else '0'
+private fun findMostCommonBit(column: Collection<Char>): Char {
+    val ones = column.count { it == '1' }
+    return if (ones >= column.size - ones) '1' else '0'
+}
 
-private fun invertBits(bitString: String) = String(bitString.map { invertBit(it) }.toCharArray())
+private fun invertBits(bits: String) = bits.map { invertBit(it) }.toCharArray().concatToString()
 private fun invertBit(bit: Char) = if (bit == '1') '0' else '1'
 
 private fun readLines(): List<String> {
