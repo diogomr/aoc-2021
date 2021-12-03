@@ -1,17 +1,9 @@
 fun main() {
-    partOne().apply {
-        println("Part One Solution: $this")
-    }
-    partTwo().apply {
-        println("Part Two Solution: $this")
-    }
+    println("Part One Solution: ${partOne()}")
+    println("Part Two Solution: ${partTwo()}")
 
-    partOneFunctional().apply {
-        println("Part One Functional Solution: $this")
-    }
-    partTwoWindowed().apply {
-        println("Part Two Windowed Solution: $this")
-    }
+    println("Part One Functional Solution: ${partOneFunctional()}")
+    println("Part Two Windowed Solution: ${partTwoWindowed()}")
 }
 
 fun partOne(): Int {
