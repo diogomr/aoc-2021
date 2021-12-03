@@ -13,16 +13,13 @@ private fun partOne(): Int {
     val lines = readLines()
     val columns = readColumns(lines)
 
-    val mostCommonBits = mutableListOf<Char>()
-    columns.forEach {
-        mostCommonBits.add(findMostCommonBit(it))
-    }
+    val mostCommonBits = columns.map {
+        findMostCommonBit(it)
+    }.toCharArray().concatToString()
+    val leastCommonBits = invertBits(mostCommonBits)
 
-    val mostCommonBitsString = String(mostCommonBits.toCharArray())
-    val leastCommonBitsString = invertBits(mostCommonBitsString)
-
-    val gammaRate = readBinaryNumber(mostCommonBitsString)
-    val epsilonRate = readBinaryNumber(leastCommonBitsString)
+    val gammaRate = readBinaryNumber(mostCommonBits)
+    val epsilonRate = readBinaryNumber(leastCommonBits)
 
     return gammaRate * epsilonRate
 }
