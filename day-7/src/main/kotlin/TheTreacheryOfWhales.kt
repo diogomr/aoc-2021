@@ -27,7 +27,8 @@ private fun partTwo(): Int {
         .map { it.toInt() }
 
     var minFuel = Int.MAX_VALUE
-    for (p in positions) {
+    val max = positions.maxOrNull()!!
+    for (p in 0 until max) {
         var fuelForPosition = 0
         for (m in positions) {
             fuelForPosition += IntRange(0, abs(p - m)).sum()
