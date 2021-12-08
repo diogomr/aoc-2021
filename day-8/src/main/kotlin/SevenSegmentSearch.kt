@@ -38,7 +38,7 @@ private fun partTwo(): Int {
 
         val eight = patterns.find { p -> p.length == 7 }!!
         val nine = patterns.find { p -> p.length == 6 && getIntersection(p, three).equalsIgnoreOrder(three) }!!
-        val middleSegment = getNonIntersecting(eight, nine)
+        val bottomLeftSegment = getNonIntersecting(eight, nine)
 
         val displays = right.split(SPACE)
         displays.map { display ->
@@ -46,19 +46,19 @@ private fun partTwo(): Int {
                 display = display,
                 rightTop = rightTopSegment,
                 rightBottom = rightBottomSegment,
-                middle = middleSegment
+                bottomLeft = bottomLeftSegment
             )
         }.joinToString("").toInt()
     }
 }
 
-fun getDigit(display: String, rightTop: String, rightBottom: String, middle: String): Int {
+fun getDigit(display: String, rightTop: String, rightBottom: String, bottomLeft: String): Int {
     return when (display.length) {
         2 -> 1
         3 -> 7
         4 -> 4
         5 -> if (!display.contains(rightBottom)) 2 else if (display.contains(rightTop)) 3 else 5
-        6 -> if (!display.contains(rightTop)) 6 else if (display.contains(middle)) 0 else 9
+        6 -> if (!display.contains(rightTop)) 6 else if (display.contains(bottomLeft)) 0 else 9
         7 -> 8
         else -> throw RuntimeException("Impossible state")
     }
