@@ -1,6 +1,7 @@
 fun main() {
     println("Part One Solution: ${partOne()}")
     println("Part Two Solution: ${partTwo()}")
+    println("Part Two Solution Non Recursive: ${partTwoNonRecursive()}")
 }
 
 private fun partOne(): Int {
@@ -38,6 +39,39 @@ private fun partTwo(): Long {
         }
 
     return letterCounter.maxOf { it.value } - letterCounter.minOf { it.value }
+}
+
+private fun partTwoNonRecursive(): Long {
+    val template = readInputLines()[0].toCharArray().toList()
+    val rules = readRules()
+
+    var pairCounter = mutableMapOf<Pair<Char, Char>, Long>()
+    template.indices.take(template.size - 1)
+        .forEach {
+            val pair = Pair(template[it], template[it + 1])
+            pairCounter.merge(pair, 1L) { old, new -> old + new }
+        }
+
+    for (i in 1..40) {
+        val newCounter = mutableMapOf<Pair<Char, Char>, Long>()
+        pairCounter.forEach {
+            val (left, right) = it.key
+            val middle = rules["$left$right"]
+            newCounter.merge(Pair(left, middle!![0]), it.value) { old, new -> old + new }
+            newCounter.merge(Pair(middle[0], right), it.value) { old, new -> old + new }
+        }
+        pairCounter = newCounter
+    }
+
+    val charCount = mutableMapOf<Char, Long>()
+    pairCounter.forEach {
+        charCount.merge(it.key.first, it.value) { old, new -> old + new }
+    }
+
+    // First key is always chosen to handle overlaps so the last element of the template is missing in the final pair
+    charCount.merge(template[template.size - 1], 1L) { old, new -> old + new }
+
+    return charCount.maxOf { it.value } - charCount.minOf { it.value }
 }
 
 private fun stepThrough(
