@@ -1,4 +1,3 @@
-import java.util.LinkedList
 import kotlin.system.measureTimeMillis
 
 fun main() {
@@ -30,22 +29,14 @@ fun dijkstraShortestDistance(start: Point, map: Array<IntArray>): Array<Array<Pa
     val distance = Array(map.size) { Array(map.size) { Pair(Int.MAX_VALUE, false) } }
     distance[start.first][start.second] = Pair(0, true)
 
-    val unvisited = LinkedList<Point>()
-    for (i in map.indices) {
-        for (j in map.indices) {
-            unvisited.add(Point(i, j))
-        }
-    }
-
+    var left = map.size * map.size
     var cur = start
-    while (unvisited.isNotEmpty()) {
-        unvisited.remove(cur)
-        cur.let { (x, y) ->
-            distance[x][y] = distance[x][y].copy(second = true)
-        }
+    while (left-- > 0) {
+        distance[cur.first][cur.second] = distance[cur.first][cur.second].copy(second = true)
 
         val adj = findAdjacent(cur, map)
-        adj.forEach { (x, y) ->
+        for (i in adj.indices) {
+            val (x, y) = adj[i]
             val newDistance = map[x][y] + distance[cur.first][cur.second].first
             if (distance[x][y].first > newDistance) distance[x][y] = distance[x][y].copy(first = newDistance)
         }
