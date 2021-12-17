@@ -24,7 +24,7 @@ private fun partOne(): Int {
     for (x in 0..xRange.last) {
         for (y in yRange.first..200) {
             val initial = Velocity(x, y)
-            findHighestPointOfHittingTrajectory(start, initial, xRange, yRange)?.let {
+            findHighestPointOfHittingTrajectory(start, initial, xRange, yRange, highest)?.let {
                 if (it.second > highest.second) highest = it
             }
         }
@@ -49,9 +49,16 @@ private fun partTwo(): Int {
     return count
 }
 
-fun findHighestPointOfHittingTrajectory(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Point? {
+private tailrec fun findHighestPointOfHittingTrajectory(
+    point: Point,
+    velocity: Velocity,
+    xRange: IntRange,
+    yRange: IntRange,
+    high: Point
+): Point? {
+    val highest = if (point.second > high.second) point else high
     if (point.first in xRange && point.second in yRange) {
-        return point
+        return highest
     }
 
     // Out of horizontal range: will never be able to get back in it since horizontal velocity is always >= 0
@@ -72,13 +79,11 @@ fun findHighestPointOfHittingTrajectory(point: Point, velocity: Velocity, xRange
     val nextPoint = Point(point.first + velocity.first, point.second + velocity.second)
     val nextVelocity = Velocity(if (velocity.first == 0) 0 else velocity.first - 1, velocity.second - 1)
 
-    return findHighestPointOfHittingTrajectory(nextPoint, nextVelocity, xRange, yRange)?.let {
-        if (it.second > point.second) it else point
-    }
+    return findHighestPointOfHittingTrajectory(nextPoint, nextVelocity, xRange, yRange, highest)
 }
 
-fun isHittingTrajectory(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Boolean {
-    return findHighestPointOfHittingTrajectory(point, velocity, xRange, yRange) != null
+private fun isHittingTrajectory(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Boolean {
+    return findHighestPointOfHittingTrajectory(point, velocity, xRange, yRange, point) != null
 }
 
 private fun readRanges(): Pair<IntRange, IntRange> {
