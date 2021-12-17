@@ -53,9 +53,22 @@ fun findHighestPointOfHittingTrajectory(point: Point, velocity: Velocity, xRange
     if (point.first in xRange && point.second in yRange) {
         return point
     }
-    if (velocity.first == 0 && point.second < yRange.last) {
+
+    // Out of horizontal range: will never be able to get back in it since horizontal velocity is always >= 0
+    if (point.first > xRange.last) {
         return null
     }
+
+    // Stopped on horizontal axis and out of range
+    if (velocity.first == 0 && point.first !in xRange) {
+        return null
+    }
+
+    // Out of vertical range and with velocity in opposite direction of range
+    if (point.second < yRange.first && velocity.second < 1) {
+        return null
+    }
+
     val nextPoint = Point(point.first + velocity.first, point.second + velocity.second)
     val nextVelocity = Velocity(if (velocity.first == 0) 0 else velocity.first - 1, velocity.second - 1)
 
