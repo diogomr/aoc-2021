@@ -19,17 +19,17 @@ private fun partOne(): Int {
 
     val (xRange, yRange) = readRanges()
 
-    var highest = Int.MIN_VALUE
+    var highest = Point(Int.MIN_VALUE, Int.MIN_VALUE)
     val start = Point(0, 0)
     for (x in 0..xRange.last) {
         for (y in yRange.first..200) {
             val initial = Velocity(x, y)
-            findHighestY(start, initial, xRange, yRange)?.let {
-                if (it > highest) highest = it
+            findHighestPointOfHittingTrajectory(start, initial, xRange, yRange)?.let {
+                if (it.second > highest.second) highest = it
             }
         }
     }
-    return highest
+    return highest.second
 }
 
 private fun partTwo(): Int {
@@ -41,7 +41,7 @@ private fun partTwo(): Int {
     for (x in 0..xRange.last) {
         for (y in yRange.first..200) {
             val initial = Velocity(x, y)
-            if (itHits(start, initial, xRange, yRange)) {
+            if (isHittingTrajectory(start, initial, xRange, yRange)) {
                 count++
             }
         }
@@ -49,9 +49,9 @@ private fun partTwo(): Int {
     return count
 }
 
-fun findHighestY(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Int? {
+fun findHighestPointOfHittingTrajectory(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Point? {
     if (point.first in xRange && point.second in yRange) {
-        return point.second
+        return point
     }
     if (velocity.first == 0 && point.second < yRange.last) {
         return null
@@ -59,13 +59,13 @@ fun findHighestY(point: Point, velocity: Velocity, xRange: IntRange, yRange: Int
     val nextPoint = Point(point.first + velocity.first, point.second + velocity.second)
     val nextVelocity = Velocity(if (velocity.first == 0) 0 else velocity.first - 1, velocity.second - 1)
 
-    return findHighestY(nextPoint, nextVelocity, xRange, yRange)?.let {
-        if (it > point.second) it else point.second
+    return findHighestPointOfHittingTrajectory(nextPoint, nextVelocity, xRange, yRange)?.let {
+        if (it.second > point.second) it else point
     }
 }
 
-fun itHits(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Boolean {
-    return findHighestY(point, velocity, xRange, yRange) != null
+fun isHittingTrajectory(point: Point, velocity: Velocity, xRange: IntRange, yRange: IntRange): Boolean {
+    return findHighestPointOfHittingTrajectory(point, velocity, xRange, yRange) != null
 }
 
 private fun readRanges(): Pair<IntRange, IntRange> {
